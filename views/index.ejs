@@ -1,0 +1,96 @@
+<html lang="en">
+  <%- include("./partials/head.ejs") %>
+
+  <body>
+    <%- include("./partials/nav.ejs") %>
+
+    <div class="content">
+      <div class="left">
+        <h1>Enter Product Details</h1>
+        <form>
+          <div class="name">
+            <label>Product Name: </label>
+            <input type="text" id="name" placeholder="Enter Product Name" />
+          </div>
+          <p id="name-message" class="message"></p>
+
+          <div class="price">
+            <label>Price Per Item: </label>
+            <input type="text" id="price" placeholder="Enter Price" />
+          </div>
+          <p id="price-message" class="message"></p>
+
+          <div class="quantity">
+            <label>Quantity: </label>
+            <input type="integer" id="quantity" placeholder="Enter Quantity" />
+          </div>
+          <p id="quantity-message" class="message"></p>
+          <button type="button" id="add" onclick="add_row()">Add</button>
+        </form>
+      </div>
+      <div class="right">
+        <h1>Your Bill</h1>
+        <table id="table">
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+          </tr>
+
+          <tr>
+            <th colspan="3">Grand Total</th>
+            <th id="Total">0</th>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      function add_row() {
+        messages = document.querySelectorAll(".message");
+        messages.forEach((element) => {
+          element.innerHTML = " ";
+        });
+
+        let name = document.getElementById("name").value.trim();
+        let price = document.getElementById("price").value.trim();
+        let quantity = document.getElementById("quantity").value.trim();
+
+        if (name == "") {
+          message = document.getElementById("name-message");
+          message.innerHTML = "<p>*Please Enter A Valid Name</p>";
+        } else if (Number.isNaN(parseFloat(price)) == true || price == "") {
+          message = document.getElementById("price-message");
+          message.innerHTML = "<p>*Please Enter A Valid Price</p>";
+        } else if (
+          Number.isInteger(parseFloat(quantity)) == false ||
+          quantity == ""
+        ) {
+          message = document.getElementById("quantity-message");
+          message.innerHTML = "<p>*Quantity must be an integer</p>";
+        } else {
+          table = document.getElementById("table");
+          let newrow = table.insertRow(1);
+          let cell1 = newrow.insertCell(0);
+          let cell2 = newrow.insertCell(1);
+          let cell3 = newrow.insertCell(2);
+          let cell4 = newrow.insertCell(3);
+
+          cell1.textContent = name;
+          cell2.textContent = price;
+          cell3.textContent = quantity;
+          cell4.textContent = price * quantity;
+
+          total = document.getElementById("Total");
+          value = parseFloat(document.getElementById("Total").textContent);
+          total.textContent = value + price * quantity;
+
+          document.getElementById("name").value = "";
+          document.getElementById("price").value = "";
+          document.getElementById("quantity").value = "";
+        }
+      }
+    </script>
+  </body>
+</html>
